@@ -1,5 +1,5 @@
 const EntrySchema = {
-  name: 'entry',
+  name: 'Entry',
   primaryKey: 'id',
   properties: {
     id: 'string',
