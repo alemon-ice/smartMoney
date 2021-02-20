@@ -1,11 +1,25 @@
-import React from 'react';
-import { FlatList, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Text, View, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+import { IEntry } from '../../interfaces/entry';
+
+import { getEntries } from '../../services/Entries';
 
 // import { EntryListItem } from './styles';
 
-import { IProps } from './types';
+const EntryList: React.FC = () => {
+  const { navigate } = useNavigation();
 
-const EntryList: React.FC<IProps> = ({ entries }) => {
+  const [entries, setEntries] = useState<IEntry[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const entriesDoc = await getEntries();
+      setEntries(entriesDoc);
+    })();
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <Text
@@ -21,9 +35,15 @@ const EntryList: React.FC<IProps> = ({ entries }) => {
       <FlatList
         data={entries}
         renderItem={({ item }) => (
-          <Text>
-            - {item.description} - ${item.amount}
-          </Text>
+          <View>
+            <Text>
+              - {item.description} - ${item.amount}
+            </Text>
+            <Button
+              title={`${item.id}`}
+              onPress={() => navigate('NewEntry', { entry: item })}
+            />
+          </View>
         )}
       />
       {/* <EntryListItem>

@@ -4,15 +4,18 @@ import { useNavigation } from '@react-navigation/native';
 
 import { BalancePanel, EntrySummary, EntryList } from '../../components';
 import { Container } from './styles';
+import { IEntry } from '../../interfaces/entry';
+
+const defaultInitalEntry: IEntry = {
+  id: null,
+  amount: '0.00',
+  description: '',
+  entryAt: new Date(),
+};
 
 const Main: React.FC = () => {
   const { navigate } = useNavigation();
   const currentBalance = 2102.45;
-  const entryListData = [
-    { key: '1', description: 'Padaria Asa Branca', amount: 10 },
-    { key: '2', description: 'Supermercado Isadora', amount: 190 },
-    { key: '3', description: 'Posto Ipiranga', amount: 190 },
-  ];
   const entrySummaryData = [
     { key: '1', description: 'Alimentação', amount: 200 },
     { key: '2', description: 'Combustível', amount: 12 },
@@ -24,9 +27,12 @@ const Main: React.FC = () => {
   return (
     <Container>
       <BalancePanel currentBalance={currentBalance} />
-      <Button title="Adicionar" onPress={() => navigate('NewEntry')} />
+      <Button
+        title="Adicionar"
+        onPress={() => navigate('NewEntry', { entry: defaultInitalEntry })}
+      />
       <EntrySummary entries={entrySummaryData} />
-      <EntryList entries={entryListData} />
+      <EntryList />
     </Container>
   );
 };

@@ -6,12 +6,12 @@ const EntrySchema = {
     amount: 'double',
     description: 'string?',
     entryAt: 'date',
-    latitude: 'float?',
-    longitude: 'float?',
-    address: 'string?',
-    photo: 'string?',
+    // latitude: 'float?',
+    // longitude: 'float?',
+    // address: 'string?',
+    // photo: 'string?',
     isInit: 'bool',
-    category: 'Category',
+    // category: 'Category',
   },
 };
 

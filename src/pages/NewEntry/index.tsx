@@ -1,28 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Button, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { BalanceLabel } from '../../components';
 import { Container } from './styles';
+import { IProps } from './types';
 
-import { saveEntry } from '../../services/Entries';
+import { saveEntry, removeEntry } from '../../services/Entries';
+import { IEntry } from '../../interfaces/entry';
 
-const NewEntry: React.FC = () => {
+const NewEntry: React.FC<IProps> = () => {
   const { goBack } = useNavigation();
-  const [amount, setAmount] = useState<string>('0');
-  const [description, setDescription] = useState<string>('0');
+  const { params } = useRoute();
+  const { entry } = params as IProps;
+
+  const [amount, setAmount] = useState<string>(`${entry.amount}`);
+  const [description, setDescription] = useState<string>(entry.description);
 
   const currentBalance = 2102.45;
 
-  const save = async () => {
-    const entry = {
-      amount: parseFloat(amount),
+  const handleSave = async () => {
+    const newEntry: IEntry = {
+      amount: Number(amount),
+      description,
+      entryAt: entry.entryAt,
     };
 
-    await saveEntry(entry);
+    await saveEntry({ currentEntry: entry, newEntryData: newEntry });
+
+    goBack();
   };
 
-  // useEffect(() => {}, []);
+  const handleRemove = async () => {
+    await removeEntry(entry);
+    goBack();
+  };
 
   return (
     <Container>
@@ -49,8 +61,9 @@ const NewEntry: React.FC = () => {
         <Button title="Câmera" onPress={() => console.log('button press')} />
       </View>
       <View>
-        <Button title="Adicionar" onPress={save} />
-        <Button title="Cancelar" onPress={() => goBack()} />
+        <Button title="Adicionar" onPress={handleSave} />
+        <Button title="Excluir" onPress={handleRemove} />
+        <Button title="Cancelar" onPress={goBack} />
       </View>
     </Container>
   );
