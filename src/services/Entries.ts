@@ -61,7 +61,7 @@ export const removeEntry = async (entry: IEntry): Promise<IEntry | null> => {
 
   try {
     realm.write(() => {
-      realm.delete(entry);
+      realm.delete(realm.objectForPrimaryKey('Entry', `${entry.id}`));
     });
 
     console.log(`removeEntry :: data: ${JSON.stringify(entry)}`);
