@@ -1,21 +1,12 @@
-import React from 'react';
-import { Button } from 'react-native';
+import React, { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { BalancePanel, EntrySummary, EntryList } from '../../components';
 import { Container } from './styles';
 import { IEntry } from '../../interfaces/entry';
 
-const defaultInitalEntry: IEntry = {
-  id: null,
-  amount: '0.00',
-  description: '',
-  entryAt: new Date(),
-};
-
 const Main: React.FC = () => {
   const { navigate } = useNavigation();
-  const currentBalance = 2102.45;
   const entrySummaryData = [
     { key: '1', description: 'Alimentação', amount: 200 },
     { key: '2', description: 'Combustível', amount: 12 },
@@ -24,13 +15,16 @@ const Main: React.FC = () => {
     { key: '5', description: 'Outros', amount: 1200 },
   ];
 
+  const onNewEntryPress = useCallback(
+    (entry: IEntry) => {
+      navigate('NewEntry', { entry });
+    },
+    [navigate],
+  );
+
   return (
     <Container>
-      <BalancePanel currentBalance={currentBalance} />
-      <Button
-        title="Adicionar"
-        onPress={() => navigate('NewEntry', { entry: defaultInitalEntry })}
-      />
+      <BalancePanel onNewEntryPress={onNewEntryPress} />
       <EntrySummary entries={entrySummaryData} />
       <EntryList />
     </Container>

@@ -1,3 +1,5 @@
+import { IEntry } from '../../interfaces/entry';
+
 export interface IProps {
-  currentBalance: number;
+  onNewEntryPress(entry: IEntry): void;
 }
