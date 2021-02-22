@@ -19,7 +19,13 @@ const NewEntry: React.FC<IProps> = () => {
 
   const currentBalance = 2102.45;
 
-  const handleSave = async () => {
+  function isValidForm() {
+    if (parseFloat(amount) !== 0) return true;
+
+    return false;
+  }
+
+  async function handleSave() {
     const newEntry: IEntry = {
       amount: Number(amount),
       description,
@@ -29,12 +35,12 @@ const NewEntry: React.FC<IProps> = () => {
     await saveEntry({ currentEntry: entry, newEntryData: newEntry });
 
     goBack();
-  };
+  }
 
-  const handleRemove = async () => {
+  async function handleRemove() {
     await removeEntry(entry);
     goBack();
-  };
+  }
 
   return (
     <Container>
@@ -61,7 +67,10 @@ const NewEntry: React.FC<IProps> = () => {
         <Button title="Câmera" onPress={() => console.log('button press')} />
       </View>
       <View>
-        <Button title="Adicionar" onPress={handleSave} />
+        <Button
+          title="Adicionar"
+          onPress={() => isValidForm() && handleSave()}
+        />
         <Button title="Excluir" onPress={handleRemove} />
         <Button title="Cancelar" onPress={goBack} />
       </View>
