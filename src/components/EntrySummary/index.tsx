@@ -1,25 +1,29 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
-import { EntrySummaryChart, EntrySummaryList } from './styles';
-import { IProps } from './types';
+import Container from '../Core/Container';
 
-const EntrySummary: React.FC<IProps> = ({ entries }) => {
+import { EntrySummaryChart, EntrySummaryList } from './styles';
+
+const EntrySummary: React.FC = () => {
+  const entries = [
+    { key: '1', description: 'Alimentação', amount: 200 },
+    { key: '2', description: 'Combustível', amount: 12 },
+    { key: '3', description: 'Aluguel', amount: 120 },
+    { key: '4', description: 'Lazer', amount: 250 },
+    { key: '5', description: 'Outros', amount: 1200 },
+  ];
+
   return (
-    <View>
+    <Container
+      title="Categorias"
+      actionLabelText="Últimos 7 dias"
+      actionButtonText="Ver mais"
+      onPressActionButton={() => console.log('press action button')}
+    >
       <EntrySummaryChart />
       <EntrySummaryList>
-        <Text
-          style={{
-            fontSize: 22,
-            fontWeight: 'bold',
-            marginTop: 10,
-            marginBottom: 10,
-          }}
-        >
-          Categorias
-        </Text>
         <FlatList
           data={entries}
           renderItem={({ item }) => (
@@ -29,7 +33,7 @@ const EntrySummary: React.FC<IProps> = ({ entries }) => {
           )}
         />
       </EntrySummaryList>
-    </View>
+    </Container>
   );
 };
 
