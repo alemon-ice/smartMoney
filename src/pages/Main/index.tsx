@@ -15,11 +15,18 @@ const Main: React.FC = () => {
     [navigate],
   );
 
+  const onPressActionButton = useCallback(() => {
+    navigate('Report');
+  }, [navigate]);
+
   return (
     <Container>
       <BalancePanel onNewEntryPress={onNewEntryPress} />
-      <EntrySummary />
-      <EntryList />
+      <EntrySummary onPressActionButton={onPressActionButton} />
+      <EntryList
+        onEntryPress={onNewEntryPress}
+        onPressActionButton={onPressActionButton}
+      />
     </Container>
   );
 };

@@ -4,9 +4,9 @@ export interface IEntry {
   description: string;
   entryAt: Date;
   isInit?: boolean;
-  // latitude: number;
-  // longitude: number;
-  // address: string;
-  // photo: string;
+  // latitude?: number;
+  // longitude?: number;
+  address?: string;
+  // photo?: string;
   // category: ICategory;
 }
