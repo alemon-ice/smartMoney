@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { View, Button, TextInput } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { BalanceLabel } from '../../components';
-import { Container } from './styles';
-import { IProps } from './types';
+import { BalanceLabel, InputMask } from '../../components';
 
 import { saveEntry, removeEntry } from '../../services/Entries';
 import { IEntry } from '../../interfaces/entry';
+import { checkIfValueIsPositive } from '../../util/checkNumber';
+
+import { Container } from './styles';
+import { IProps } from './types';
 
 const NewEntry: React.FC<IProps> = () => {
   const { goBack } = useNavigation();
@@ -16,8 +18,9 @@ const NewEntry: React.FC<IProps> = () => {
 
   const [amount, setAmount] = useState<string>(`${entry.amount}`);
   const [description, setDescription] = useState<string>(entry.description);
-
-  const currentBalance = 2102.45;
+  const [debit, setDebit] = useState(
+    checkIfValueIsPositive(Number(amount)) ? 1 : -1,
+  );
 
   function isValidForm() {
     if (parseFloat(amount) !== 0) return true;
@@ -27,7 +30,7 @@ const NewEntry: React.FC<IProps> = () => {
 
   async function handleSave() {
     const newEntry: IEntry = {
-      amount: Number(amount),
+      amount: Number(amount) * debit,
       description,
       entryAt: entry.entryAt,
     };
@@ -44,16 +47,22 @@ const NewEntry: React.FC<IProps> = () => {
 
   return (
     <Container>
-      <BalanceLabel currentBalance={currentBalance} />
+      <BalanceLabel />
 
       <View>
-        <TextInput
-          style={{
-            borderColor: '#000',
-            borderWidth: 1,
+        <InputMask
+          type="money"
+          options={{
+            precision: 2,
+            separator: ',',
+            delimiter: '.',
+            unit: '',
+            suffixUnit: '',
           }}
-          onChangeText={value => setAmount(value)}
+          onChangeValue={setAmount}
           value={amount}
+          debit={debit}
+          setDebit={setDebit}
         />
         <TextInput
           style={{

@@ -1,9 +1,13 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
-import { IProps } from './types';
+import { colors } from '../../styles/colors';
 
-const BalanceLabel: React.FC<IProps> = ({ currentBalance }) => {
+// import { IProps } from './types';
+
+const BalanceLabel: React.FC = () => {
+  const currentBalance = 2102.45;
   return (
     <View
       style={{
@@ -14,17 +18,29 @@ const BalanceLabel: React.FC<IProps> = ({ currentBalance }) => {
       <Text
         style={{
           fontSize: 12,
+          color: colors.white,
         }}
       >
         Saldo Atual
       </Text>
-      <Text
+      <LinearGradient
         style={{
-          fontSize: 18,
+          borderRadius: 10,
+          paddingVertical: 10,
+          paddingHorizontal: 20,
+          marginVertical: 10,
         }}
+        colors={[colors.violet, colors.blue]}
       >
-        ${currentBalance}
-      </Text>
+        <Text
+          style={{
+            fontSize: 18,
+            color: colors.white,
+          }}
+        >
+          ${currentBalance}
+        </Text>
+      </LinearGradient>
     </View>
   );
 };

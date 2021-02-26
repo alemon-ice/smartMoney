@@ -6,7 +6,7 @@ export interface IEntry {
   isInit?: boolean;
   // latitude?: number;
   // longitude?: number;
-  address?: string;
+  // address?: string;
   // photo?: string;
   // category: ICategory;
 }
