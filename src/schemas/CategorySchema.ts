@@ -4,10 +4,8 @@ const CategorySchema = {
   properties: {
     id: 'string',
     name: 'string',
-    color: { type: 'string', default: '#fff' },
-    isDefault: { type: 'bool', default: false },
-    isCredit: { type: 'bool', default: false },
-    isDebit: { type: 'bool', default: false },
+    color: 'string',
+    entryType: 'string',
     order: { type: 'int', default: 0 },
     entries: 'Entry[]',
   },
