@@ -34,7 +34,7 @@ const BalanceLabel: React.FC = () => {
       >
         <Text
           style={{
-            fontSize: 18,
+            fontSize: 28,
             color: colors.white,
           }}
         >

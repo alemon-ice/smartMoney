@@ -8,10 +8,11 @@ import { getDefaultCategories } from './Categories';
 export const getRealm = async (): Promise<Realm> => {
   const realm = await Realm.open({
     schema: [CategorySchema, EntrySchema],
-    schemaVersion: 2,
+    schemaVersion: 3,
   });
 
   initDB(realm);
+  // dropDB(realm);
 
   return realm;
 };
@@ -33,4 +34,11 @@ export const initDB = (realm: Realm): void => {
       console.error(`initDB :: error on init Database:\n${err}`);
     }
   }
+};
+
+export const dropDB = (realm: Realm): void => {
+  console.log(`dropDB :: dropping db...`);
+  realm.write(() => {
+    realm.deleteAll();
+  });
 };

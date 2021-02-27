@@ -17,8 +17,7 @@ const EntryListItem: React.FC<IProps> = ({
   const bulletLineY = isFirstItem ? 25 : 0;
   const bulletLineHeight = isLastItem ? 25 : 50;
   const showBulletLine = !(isFirstItem && isLastItem);
-  // const bulletColor = entry.category.color || colors.blue;
-  const bulletColor = colors.blue;
+  const bulletColor = entry.category.color || colors.blue;
 
   return (
     <TouchableOpacity onPress={() => onEntryPress(entry)}>
@@ -77,7 +76,7 @@ const EntryListItem: React.FC<IProps> = ({
             >
               {entry.entryAt.toLocaleString()}
             </Text>
-            {entry.address && (
+            {/* {entry.address && (
               <>
                 <Icon
                   style={{
@@ -97,7 +96,7 @@ const EntryListItem: React.FC<IProps> = ({
                   Localização
                 </Text>
               </>
-            )}
+            )} */}
           </View>
         </DescriptionView>
 

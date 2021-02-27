@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { colors } from '../../styles/colors';
 import { IEntry } from '../../interfaces/entry';
+import { ICategory } from '../../interfaces/category';
 
 import { BalancePanelLabel, BalancePanelChart, AddButton } from './styles';
 import { IProps } from './types';
@@ -14,6 +15,10 @@ const defaultInitalEntry: IEntry = {
   amount: '0.00',
   description: '',
   entryAt: new Date(),
+  category: {
+    id: '',
+    name: 'Selecionar categoria',
+  } as ICategory,
 };
 
 const BalancePanel: React.FC<IProps> = ({ onNewEntryPress }) => {

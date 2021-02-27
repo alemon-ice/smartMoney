@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Button, TextInput } from 'react-native';
+import { View, Button } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { BalanceLabel, InputMask } from '../../components';
+import { BalanceLabel, InputMask, InputPicker } from '../../components';
 
 import { saveEntry, removeEntry } from '../../services/Entries';
 import { IEntry } from '../../interfaces/entry';
+import { ICategory } from '../../interfaces/category';
 import { checkIfValueIsPositive } from '../../util/checkNumber';
 
 import { Container } from './styles';
@@ -17,7 +18,8 @@ const NewEntry: React.FC<IProps> = () => {
   const { entry } = params as IProps;
 
   const [amount, setAmount] = useState<string>(`${entry.amount}`);
-  const [description, setDescription] = useState<string>(entry.description);
+  const [category, setCategory] = useState<ICategory>(entry.category);
+  // const [description, setDescription] = useState<string>(entry.description);
   const [debit, setDebit] = useState(
     checkIfValueIsPositive(Number(amount)) ? 1 : -1,
   );
@@ -31,8 +33,9 @@ const NewEntry: React.FC<IProps> = () => {
   async function handleSave() {
     const newEntry: IEntry = {
       amount: Number(amount) * debit,
-      description,
+      description: 'Descrição',
       entryAt: entry.entryAt,
+      category,
     };
 
     await saveEntry({ currentEntry: entry, newEntryData: newEntry });
@@ -64,13 +67,10 @@ const NewEntry: React.FC<IProps> = () => {
           debit={debit}
           setDebit={setDebit}
         />
-        <TextInput
-          style={{
-            borderColor: '#000',
-            borderWidth: 1,
-          }}
-          onChangeText={value => setDescription(value)}
-          value={description}
+        <InputPicker
+          debit={debit}
+          category={category}
+          setCategory={setCategory}
         />
         <Button title="GPS" onPress={() => console.log('button press')} />
         <Button title="Câmera" onPress={() => console.log('button press')} />

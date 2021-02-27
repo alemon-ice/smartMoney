@@ -33,6 +33,7 @@ export const saveEntry = async ({
         entryAt: newEntryData.entryAt || currentEntry.entryAt || new Date(),
         description: newEntryData.description || currentEntry.description,
         isInit: false,
+        category: newEntryData.category || currentEntry.category,
       };
 
       realm.create(

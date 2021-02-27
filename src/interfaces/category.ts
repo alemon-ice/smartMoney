@@ -4,7 +4,9 @@ export interface ICategory {
   id: string;
   name: string;
   color: string;
-  entryType: 'isCredit' | 'isDebit' | 'isInit';
+  entryType: EntryTypeValues;
   order: number;
   entries: IEntry[];
 }
+
+export type EntryTypeValues = 'isCredit' | 'isDebit' | 'isInit';

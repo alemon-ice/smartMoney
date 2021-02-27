@@ -1,3 +1,5 @@
+import { ICategory } from './category';
+
 export interface IEntry {
   id?: string | null;
   amount: number | string;
@@ -8,5 +10,5 @@ export interface IEntry {
   // longitude?: number;
   // address?: string;
   // photo?: string;
-  // category: ICategory;
+  category: ICategory;
 }

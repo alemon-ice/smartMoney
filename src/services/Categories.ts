@@ -1,7 +1,7 @@
 import { getRealm } from './Realm';
 
 import { defaultCategories } from '../util/defaultCategories';
-import { ICategory } from '../interfaces/category';
+import { ICategory, EntryTypeValues } from '../interfaces/category';
 
 export const getDefaultCategories = (): ICategory[] => {
   const {
@@ -14,26 +14,26 @@ export const getDefaultCategories = (): ICategory[] => {
 };
 
 export const getCategories = async (
-  entryType?: 'isCredit' | 'isDebit' | 'isInit',
+  entryType?: EntryTypeValues,
 ): Promise<ICategory[]> => {
   const realm = await getRealm();
 
   if (entryType === 'isDebit')
     return realm
       .objects('Category')
-      .filtered('entryType == isDebit')
+      .filtered("entryType == 'isDebit'")
       .sorted('order')
       .toJSON();
   if (entryType === 'isCredit')
     return realm
       .objects('Category')
-      .filtered('entryType = isCredit')
+      .filtered("entryType == 'isCredit'")
       .sorted('order')
       .toJSON();
   if (entryType === 'isInit')
     return realm
       .objects('Category')
-      .filtered('entryType = isInit')
+      .filtered("entryType == 'isInit'")
       .sorted('order')
       .toJSON();
   return realm.objects('Category').sorted('order').toJSON();
