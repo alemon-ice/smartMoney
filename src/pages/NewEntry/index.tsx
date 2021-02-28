@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { View, Button } from 'react-native';
+import { View, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import DatetimePicker from 'react-native-modal-datetime-picker';
 
-import { BalanceLabel, InputMask, InputPicker } from '../../components';
+import {
+  BalanceLabel,
+  InputMask,
+  InputPicker,
+  CircularButton,
+} from '../../components';
+import ActionFooter, { ActionButton } from '../../components/Core/ActionFooter';
 
 import { saveEntry, removeEntry } from '../../services/Entries';
 import { IEntry } from '../../interfaces/entry';
@@ -11,6 +18,7 @@ import { checkIfValueIsPositive } from '../../util/checkNumber';
 
 import { Container } from './styles';
 import { IProps } from './types';
+import { colors } from '../../styles/colors';
 
 const NewEntry: React.FC<IProps> = () => {
   const { goBack } = useNavigation();
@@ -19,10 +27,17 @@ const NewEntry: React.FC<IProps> = () => {
 
   const [amount, setAmount] = useState<string>(`${entry.amount}`);
   const [category, setCategory] = useState<ICategory>(entry.category);
+  const [entryAt, setEntryAt] = useState<Date>(entry.entryAt);
   // const [description, setDescription] = useState<string>(entry.description);
   const [debit, setDebit] = useState(
     checkIfValueIsPositive(Number(amount)) ? 1 : -1,
   );
+  const [modalDateIsVisible, setModalDateIsVisible] = useState(false);
+
+  function onChangeDate(date: Date) {
+    setEntryAt(date);
+    setModalDateIsVisible(!modalDateIsVisible);
+  }
 
   function isValidForm() {
     if (parseFloat(amount) !== 0) return true;
@@ -33,8 +48,8 @@ const NewEntry: React.FC<IProps> = () => {
   async function handleSave() {
     const newEntry: IEntry = {
       amount: Number(amount) * debit,
-      description: 'Descrição',
-      entryAt: entry.entryAt,
+      description: category.name,
+      entryAt,
       category,
     };
 
@@ -44,15 +59,33 @@ const NewEntry: React.FC<IProps> = () => {
   }
 
   async function handleRemove() {
-    await removeEntry(entry);
-    goBack();
+    Alert.alert(
+      'Apagar?',
+      'Você deseja realmente apagar este lançamento?',
+      [
+        { text: 'Não', style: 'cancel' },
+        {
+          text: 'Sim',
+          onPress: async () => {
+            await removeEntry(entry);
+            goBack();
+          },
+        },
+      ],
+      { cancelable: false },
+    );
   }
 
   return (
     <Container>
       <BalanceLabel />
 
-      <View>
+      <View
+        style={{
+          flex: 1,
+          paddingVertical: 20,
+        }}
+      >
         <InputMask
           type="money"
           options={{
@@ -72,17 +105,46 @@ const NewEntry: React.FC<IProps> = () => {
           category={category}
           setCategory={setCategory}
         />
-        <Button title="GPS" onPress={() => console.log('button press')} />
-        <Button title="Câmera" onPress={() => console.log('button press')} />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginVertical: 10,
+            marginHorizontal: 20,
+          }}
+        >
+          <CircularButton
+            icon="today"
+            color={colors.asphalt}
+            onPressAction={() => setModalDateIsVisible(!modalDateIsVisible)}
+          >
+            <DatetimePicker
+              isVisible={modalDateIsVisible}
+              mode="date"
+              isDarkModeEnabled
+              date={entryAt}
+              onConfirm={onChangeDate}
+              onCancel={() => setModalDateIsVisible(!modalDateIsVisible)}
+            />
+          </CircularButton>
+          {entry.id && (
+            <CircularButton
+              icon="delete"
+              color={colors.red}
+              onPressAction={handleRemove}
+            />
+          )}
+        </View>
       </View>
-      <View>
-        <Button
-          title="Adicionar"
-          onPress={() => isValidForm() && handleSave()}
+
+      <ActionFooter>
+        <ActionButton
+          type="primary"
+          title={entry.id ? 'Salvar' : 'Adicionar'}
+          onPress={() => isValidForm() && handleRemove()}
         />
-        <Button title="Excluir" onPress={handleRemove} />
-        <Button title="Cancelar" onPress={goBack} />
-      </View>
+        <ActionButton title="Cancelar" onPress={goBack} />
+      </ActionFooter>
     </Container>
   );
 };

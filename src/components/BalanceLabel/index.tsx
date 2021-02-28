@@ -13,6 +13,7 @@ const BalanceLabel: React.FC = () => {
       style={{
         // flex: 1,
         alignItems: 'center',
+        padding: 20,
       }}
     >
       <Text

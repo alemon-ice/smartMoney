@@ -5,6 +5,7 @@ import { colors } from '../../styles/colors';
 import { getCategories } from '../../services/Categories';
 import { ICategory } from '../../interfaces/category';
 import { isCreditOrDebit } from '../../util/checkNumber';
+import ActionFooter, { ActionButton } from '../Core/ActionFooter';
 
 import { Container, ModalContainer } from './styles';
 import { IProps } from './types';
@@ -81,30 +82,13 @@ const InputPicker: React.FC<IProps> = ({ debit, category, setCategory }) => {
               </TouchableOpacity>
             )}
           />
-          <TouchableOpacity
-            onPress={() => setModalIsVisible(!modalIsVisible)}
-            style={{
-              borderColor: colors.green,
-              backgroundColor: colors.background,
-              borderWidth: 1.5,
-              borderRadius: 15,
-              alignSelf: 'center',
-              marginVertical: 10,
-              marginHorizontal: 20,
-              paddingVertical: 5,
-              paddingHorizontal: 10,
-            }}
-          >
-            <Text
-              style={{
-                color: colors.green,
-                textAlign: 'center',
-                fontSize: 14,
-              }}
-            >
-              Fechar
-            </Text>
-          </TouchableOpacity>
+          <ActionFooter>
+            <ActionButton
+              type="primary"
+              title="Fechar"
+              onPress={() => setModalIsVisible(!modalIsVisible)}
+            />
+          </ActionFooter>
         </ModalContainer>
       </Modal>
     </Container>

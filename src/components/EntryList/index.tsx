@@ -17,7 +17,7 @@ const EntryList: React.FC<IProps> = ({ onEntryPress, onPressActionButton }) => {
       setEntries(entriesDoc);
     })();
   }, []);
-  console.log(entries);
+
   return (
     <Container
       title="Últimos Lançamentos"
