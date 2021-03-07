@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native';
 
 import { BalancePanel, EntrySummary, EntryList } from '../../components';
-import { Container } from './styles';
 import { IEntry } from '../../interfaces/entry';
+import { Container } from './styles';
 
 const Main: React.FC = () => {
   const { navigate } = useNavigation();
@@ -22,11 +23,13 @@ const Main: React.FC = () => {
   return (
     <Container>
       <BalancePanel onNewEntryPress={onNewEntryPress} />
-      <EntrySummary onPressActionButton={onPressActionButton} />
-      <EntryList
-        onEntryPress={onNewEntryPress}
-        onPressActionButton={onPressActionButton}
-      />
+      <ScrollView>
+        <EntrySummary onPressActionButton={onPressActionButton} />
+        <EntryList
+          onEntryPress={onNewEntryPress}
+          onPressActionButton={onPressActionButton}
+        />
+      </ScrollView>
     </Container>
   );
 };

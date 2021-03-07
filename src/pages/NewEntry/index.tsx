@@ -36,7 +36,7 @@ const NewEntry: React.FC<IProps> = () => {
 
   function onChangeDate(date: Date) {
     setEntryAt(date);
-    setModalDateIsVisible(!modalDateIsVisible);
+    setModalDateIsVisible(false);
   }
 
   function isValidForm() {
@@ -141,7 +141,7 @@ const NewEntry: React.FC<IProps> = () => {
         <ActionButton
           type="primary"
           title={entry.id ? 'Salvar' : 'Adicionar'}
-          onPress={() => isValidForm() && handleRemove()}
+          onPress={() => isValidForm() && handleSave()}
         />
         <ActionButton title="Cancelar" onPress={goBack} />
       </ActionFooter>

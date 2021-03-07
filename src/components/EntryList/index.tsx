@@ -8,20 +8,25 @@ import { getEntries } from '../../services/Entries';
 import EntryListItem from './EntryListItem';
 import { IProps } from './types';
 
-const EntryList: React.FC<IProps> = ({ onEntryPress, onPressActionButton }) => {
+const EntryList: React.FC<IProps> = ({
+  days = 7,
+  category = 'all',
+  onEntryPress,
+  onPressActionButton,
+}) => {
   const [entries, setEntries] = useState<IEntry[]>([]);
 
   useEffect(() => {
     (async () => {
-      const entriesDoc = await getEntries();
+      const entriesDoc = await getEntries(days, category);
       setEntries(entriesDoc);
     })();
-  }, []);
+  }, [days, category]);
 
   return (
     <Container
       title="Últimos Lançamentos"
-      actionLabelText="Últimos 7 dias"
+      actionLabelText={`Últimos ${days} dias`}
       actionButtonText="Ver mais"
       onPressActionButton={onPressActionButton}
     >

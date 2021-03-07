@@ -8,8 +8,3 @@ export const Container = styled.View`
   border-radius: 15px;
   margin: 10px 20px;
 `;
-
-export const ModalContainer = styled.View`
-  flex: 1;
-  background-color: ${colors.background};
-`;

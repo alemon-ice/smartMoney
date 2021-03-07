@@ -1,18 +1,39 @@
 import { Alert } from 'react-native';
 import { v4 as uuidv4 } from 'uuid';
 import { getRealm } from './Realm';
+import { moment } from '../vendors';
 
 import { IEntry } from '../interfaces/entry';
+import { ICategory } from '../interfaces/category';
 
 interface ISaveEntryProps {
   currentEntry: IEntry;
   newEntryData: IEntry;
 }
 
-export const getEntries = async (): Promise<IEntry[]> => {
+export const getEntries = async (
+  days: number,
+  category: ICategory | 'all',
+): Promise<IEntry[]> => {
+  console.log(category);
   const realm = await getRealm();
 
-  const entries: IEntry[] = realm.objects('Entry').toJSON();
+  const date = moment().subtract(days, 'days').toDate();
+
+  if (category === 'all') {
+    const entries: IEntry[] = realm
+      .objects('Entry')
+      .filtered('entryAt >= $0', date)
+      .toJSON();
+
+    return entries;
+  }
+  const entries: IEntry[] = realm
+    .objects('Entry')
+    .filtered('entryAt >= $0', date)
+    .filtered('category >= $0', category)
+    .toJSON();
+  console.log('cade', entries);
 
   return entries;
 };
