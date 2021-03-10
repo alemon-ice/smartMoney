@@ -13,14 +13,13 @@ interface ISaveEntryProps {
 
 export const getEntries = async (
   days: number,
-  category: ICategory | 'all',
+  category?: ICategory,
 ): Promise<IEntry[]> => {
-  console.log(category);
   const realm = await getRealm();
 
   const date = moment().subtract(days, 'days').toDate();
 
-  if (category === 'all') {
+  if (!category) {
     const entries: IEntry[] = realm
       .objects('Entry')
       .filtered('entryAt >= $0', date)
@@ -31,9 +30,8 @@ export const getEntries = async (
   const entries: IEntry[] = realm
     .objects('Entry')
     .filtered('entryAt >= $0', date)
-    .filtered('category >= $0', category)
+    .filtered('category == $0', category)
     .toJSON();
-  console.log('cade', entries);
 
   return entries;
 };

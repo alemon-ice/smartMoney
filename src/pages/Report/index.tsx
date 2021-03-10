@@ -26,9 +26,7 @@ const Report: React.FC = () => {
   const [modalCategoryIsVisible, setModalCategoryIsVisible] = useState<boolean>(
     false,
   );
-  const [category, setCategory] = useState<Partial<ICategory>>({
-    name: 'Todas Categorias',
-  });
+  const [category, setCategory] = useState<ICategory | undefined>();
 
   const handleChangeRelativeDays = useCallback(
     (relativeDaysValue: number) => {
@@ -117,7 +115,7 @@ const Report: React.FC = () => {
               textAlign: 'center',
             }}
           >
-            {category.name}
+            {!category ? 'Todas Categorias' : category.name}
           </Text>
           <Icon
             name="keyboard-arrow-down"

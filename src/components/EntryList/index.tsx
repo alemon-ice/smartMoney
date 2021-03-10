@@ -10,7 +10,7 @@ import { IProps } from './types';
 
 const EntryList: React.FC<IProps> = ({
   days = 7,
-  category = 'all',
+  category,
   onEntryPress,
   onPressActionButton,
 }) => {

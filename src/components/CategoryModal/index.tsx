@@ -19,7 +19,7 @@ const CategoryModal: React.FC<IProps> = ({
 
   useEffect(() => {
     (async () => {
-      let categoriesList = [];
+      let categoriesList: ICategory[] = [];
       if (!debit) {
         categoriesList = await getCategories();
       } else {

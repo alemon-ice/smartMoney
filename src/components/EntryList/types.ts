@@ -3,7 +3,7 @@ import { IEntry } from '../../interfaces/entry';
 
 export interface IProps {
   days?: number;
-  category?: ICategory | 'all';
+  category?: ICategory;
   onEntryPress(entry: IEntry): void;
   onPressActionButton: () => void;
 }
