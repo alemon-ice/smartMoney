@@ -1,39 +1,74 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+import Svg, { Circle } from 'react-native-svg';
 
 import Container from '../Core/Container';
+import EntrySummaryChart from '../EntrySummaryChart';
+import useBalanceSumByCategory from '../../hooks/useBalanceSumByCategory';
+import { colors } from '../../styles/colors';
 
-import { EntrySummaryChart, EntrySummaryList } from './styles';
+import { EntrySummaryList, ChartContainer } from './styles';
 import { IProps } from './types';
 
-const entries = [
-  { key: '1', description: 'Alimentação', amount: 200 },
-  { key: '2', description: 'Combustível', amount: 12 },
-  { key: '3', description: 'Aluguel', amount: 120 },
-  { key: '4', description: 'Lazer', amount: 250 },
-  { key: '5', description: 'Outros', amount: 1200 },
-];
+const EntrySummary: React.FC<IProps> = ({ days = 7, onPressActionButton }) => {
+  const { balanceSum } = useBalanceSumByCategory(days);
 
-const EntrySummary: React.FC<IProps> = ({ onPressActionButton }) => {
   return (
     <Container
       title="Categorias"
-      actionLabelText="Últimos 7 dias"
+      actionLabelText={`Últimos ${days} dias`}
       actionButtonText="Ver mais"
       onPressActionButton={onPressActionButton}
     >
-      <EntrySummaryChart />
-      <EntrySummaryList>
-        <FlatList
-          data={entries}
-          renderItem={({ item }) => (
-            <Text>
-              - {item.description} - ${item.amount}
-            </Text>
-          )}
-        />
-      </EntrySummaryList>
+      <ChartContainer>
+        <EntrySummaryChart data={balanceSum} />
+        <EntrySummaryList>
+          <FlatList
+            data={balanceSum}
+            keyExtractor={item => item.category.id}
+            renderItem={({ item: entry }) => (
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}
+              >
+                <Svg height="20" width="22">
+                  <Circle
+                    cx="10"
+                    cy="10"
+                    r="8"
+                    stroke={colors.background}
+                    strokeWidth="0.5"
+                    fill={entry.category.color || colors.white}
+                  />
+                </Svg>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: colors.white,
+                    marginTop: 2,
+                  }}
+                >
+                  {entry.category.name}
+                </Text>
+                <Text
+                  style={{
+                    flex: 1,
+                    fontSize: 12,
+                    color: colors.white,
+                    marginTop: 2,
+                    textAlign: 'right',
+                  }}
+                >
+                  {entry.amount}
+                </Text>
+                <Text />
+              </View>
+            )}
+          />
+        </EntrySummaryList>
+      </ChartContainer>
     </Container>
   );
 };

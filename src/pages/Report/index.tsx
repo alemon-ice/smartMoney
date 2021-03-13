@@ -131,7 +131,10 @@ const Report: React.FC = () => {
       </View>
 
       <ScrollView>
-        <EntrySummary onPressActionButton={() => console.log('')} />
+        <EntrySummary
+          days={relativeDays}
+          onPressActionButton={() => console.log('')}
+        />
         <EntryList
           days={relativeDays}
           category={category}
