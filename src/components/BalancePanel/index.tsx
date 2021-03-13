@@ -3,12 +3,13 @@ import { Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import BalancePanelChart from '../BalancePanelChart';
 import { colors } from '../../styles/colors';
 import { IEntry } from '../../interfaces/entry';
 import { ICategory } from '../../interfaces/category';
 import useBalance from '../../hooks/useBalance';
 
-import { BalancePanelLabel, BalancePanelChart, AddButton } from './styles';
+import { Container, BalancePanelLabel, AddButton } from './styles';
 import { IProps } from './types';
 
 const defaultInitalEntry: IEntry = {
@@ -26,10 +27,10 @@ const BalancePanel: React.FC<IProps> = ({ onNewEntryPress }) => {
   const { balance } = useBalance();
 
   return (
-    <View>
+    <Container>
       <LinearGradient
         colors={[colors.violet, colors.blue]}
-        style={{ paddingVertical: 10 }}
+        // style={{ paddingVertical: 10 }}
       >
         <BalancePanelLabel>
           <Text style={{ fontSize: 14, color: colors.white }}>Saldo atual</Text>
@@ -46,7 +47,7 @@ const BalancePanel: React.FC<IProps> = ({ onNewEntryPress }) => {
       >
         <Icon name="add" size={30} color="#fff" />
       </AddButton>
-    </View>
+    </Container>
   );
 };
 

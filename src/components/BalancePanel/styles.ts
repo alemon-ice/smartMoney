@@ -1,13 +1,13 @@
 import styled from 'styled-components/native';
 import { colors } from '../../styles/colors';
 
-export const BalancePanelLabel = styled.View`
-  /* flex: 1; */
-  align-items: center;
+export const Container = styled.View`
+  margin-bottom: -20px;
 `;
 
-export const BalancePanelChart = styled.View`
-  /* flex: 1; */
+export const BalancePanelLabel = styled.View`
+  z-index: 1;
+  align-items: center;
 `;
 
 export const AddButton = styled.TouchableOpacity`
