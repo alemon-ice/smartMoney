@@ -11,19 +11,20 @@ import {
 } from '../../components';
 import ActionFooter, { ActionButton } from '../../components/Core/ActionFooter';
 
-import { saveEntry, removeEntry } from '../../services/Entries';
 import { IEntry } from '../../interfaces/entry';
 import { ICategory } from '../../interfaces/category';
 import { checkIfValueIsPositive } from '../../util/checkNumber';
+import { colors } from '../../styles/colors';
+import useEntries from '../../hooks/useEntries';
 
 import { Container } from './styles';
 import { IProps } from './types';
-import { colors } from '../../styles/colors';
 
 const NewEntry: React.FC<IProps> = () => {
   const { goBack } = useNavigation();
   const { params } = useRoute();
   const { entry } = params as IProps;
+  const { saveEntry, removeEntry } = useEntries();
 
   const [amount, setAmount] = useState<string>(`${entry.amount}`);
   const [category, setCategory] = useState<ICategory>(entry.category);

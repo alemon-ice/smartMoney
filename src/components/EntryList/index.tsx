@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FlatList } from 'react-native';
 
 import Container from '../Core/Container';
-import { IEntry } from '../../interfaces/entry';
-import { getEntries } from '../../services/Entries';
+import useEntries from '../../hooks/useEntries';
 
 import EntryListItem from './EntryListItem';
 import { IProps } from './types';
@@ -14,14 +13,7 @@ const EntryList: React.FC<IProps> = ({
   onEntryPress,
   onPressActionButton,
 }) => {
-  const [entries, setEntries] = useState<IEntry[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      const entriesDoc = await getEntries(days, category);
-      setEntries(entriesDoc);
-    })();
-  }, [days, category]);
+  const { entries } = useEntries(days, category);
 
   return (
     <Container

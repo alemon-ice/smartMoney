@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { TouchableOpacity, Text, Modal, FlatList } from 'react-native';
 
-import { getCategories } from '../../services/Categories';
 import { isCreditOrDebit } from '../../util/checkNumber';
-import { ICategory } from '../../interfaces/category';
 import ActionFooter, { ActionButton } from '../Core/ActionFooter';
 import { colors } from '../../styles/colors';
+import useCategories from '../../hooks/useCategories';
+
 import { ModalContainer } from './styles';
 import { IProps } from './types';
 
@@ -15,27 +15,13 @@ const CategoryModal: React.FC<IProps> = ({
   onClose,
   onChangeCategory,
 }) => {
-  const [categories, setCategories] = useState<ICategory[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      let categoriesList: ICategory[] = [];
-      if (!debit) {
-        categoriesList = await getCategories();
-      } else {
-        const entryType = isCreditOrDebit(debit);
-        categoriesList = await getCategories(entryType);
-      }
-      setCategories(categoriesList);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debit]);
+  const categories = useCategories();
 
   return (
     <Modal animationType="slide" transparent={false} visible={modalIsVisible}>
       <ModalContainer>
         <FlatList
-          data={categories}
+          data={!debit ? categories.all : categories[isCreditOrDebit(debit)]}
           keyExtractor={item => item.id}
           renderItem={({ item: categoryItem, index }) => (
             <TouchableOpacity

@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { colors } from '../../styles/colors';
 import { IEntry } from '../../interfaces/entry';
 import { ICategory } from '../../interfaces/category';
+import useBalance from '../../hooks/useBalance';
 
 import { BalancePanelLabel, BalancePanelChart, AddButton } from './styles';
 import { IProps } from './types';
@@ -22,7 +23,8 @@ const defaultInitalEntry: IEntry = {
 };
 
 const BalancePanel: React.FC<IProps> = ({ onNewEntryPress }) => {
-  const currentBalance = 2102.45;
+  const { balance } = useBalance();
+
   return (
     <View>
       <LinearGradient
@@ -31,9 +33,7 @@ const BalancePanel: React.FC<IProps> = ({ onNewEntryPress }) => {
       >
         <BalancePanelLabel>
           <Text style={{ fontSize: 14, color: colors.white }}>Saldo atual</Text>
-          <Text style={{ fontSize: 36, color: colors.white }}>
-            ${currentBalance}
-          </Text>
+          <Text style={{ fontSize: 36, color: colors.white }}>${balance}</Text>
         </BalancePanelLabel>
         <BalancePanelChart />
       </LinearGradient>

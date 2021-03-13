@@ -27,10 +27,16 @@ export const getEntries = async (
 
     return entries;
   }
+  console.log(category);
   const entries: IEntry[] = realm
     .objects('Entry')
-    .filtered('entryAt >= $0', date)
-    .filtered('category == $0', category)
+    // .filtered('entryAt >= $0', date)
+    // .filtered('category == $0', category)
+    .filtered(
+      `entryAt >= ${date} && category == ${{
+        id: category.id,
+      }}`,
+    )
     .toJSON();
 
   return entries;
