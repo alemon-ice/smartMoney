@@ -6,9 +6,9 @@ export interface IEntry {
   description: string;
   entryAt: Date;
   isInit?: boolean;
-  // latitude?: number;
-  // longitude?: number;
-  // address?: string;
+  latitude: number | null;
+  longitude: number | null;
+  address: string | null;
   // photo?: string;
   category: ICategory;
 }

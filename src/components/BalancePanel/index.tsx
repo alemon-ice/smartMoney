@@ -5,23 +5,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import BalancePanelChart from '../BalancePanelChart';
 import { colors } from '../../styles/colors';
-import { IEntry } from '../../interfaces/entry';
-import { ICategory } from '../../interfaces/category';
+import { defaultInitalEntry } from '../../util/NewEntryValue';
 import useBalance from '../../hooks/useBalance';
 
 import { Container, BalancePanelLabel, AddButton } from './styles';
 import { IProps } from './types';
-
-const defaultInitalEntry: IEntry = {
-  id: null,
-  amount: '0.00',
-  description: '',
-  entryAt: new Date(),
-  category: {
-    id: '',
-    name: 'Selecionar categoria',
-  } as ICategory,
-};
 
 const BalancePanel: React.FC<IProps> = ({ onNewEntryPress }) => {
   const { balance } = useBalance();

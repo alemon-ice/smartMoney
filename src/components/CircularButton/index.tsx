@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { colors } from '../../styles/colors';
 
 import { IProps } from './types';
-// import { Container } from './styles';
 
 const CircularButton: React.FC<IProps> = ({
   icon,
@@ -16,7 +15,7 @@ const CircularButton: React.FC<IProps> = ({
   return (
     <View
       style={{
-        marginHorizontal: 2.5,
+        marginHorizontal: 10,
       }}
     >
       <TouchableOpacity

@@ -76,7 +76,7 @@ const EntryListItem: React.FC<IProps> = ({
             >
               {entry.entryAt.toLocaleString()}
             </Text>
-            {/* {entry.address && (
+            {entry.address && (
               <>
                 <Icon
                   style={{
@@ -96,7 +96,7 @@ const EntryListItem: React.FC<IProps> = ({
                   Localização
                 </Text>
               </>
-            )} */}
+            )}
           </View>
         </DescriptionView>
 

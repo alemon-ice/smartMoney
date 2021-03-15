@@ -57,6 +57,9 @@ export const saveEntry = async ({
         amount: newEntryData.amount || currentEntry.amount,
         entryAt: newEntryData.entryAt || currentEntry.entryAt || new Date(),
         description: newEntryData.description || currentEntry.description,
+        latitude: newEntryData.latitude || currentEntry.latitude,
+        longitude: newEntryData.longitude || currentEntry.longitude,
+        address: newEntryData.address || currentEntry.address,
         isInit: false,
         category: newEntryData.category || currentEntry.category,
       };
