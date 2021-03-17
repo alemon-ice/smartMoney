@@ -9,6 +9,6 @@ export interface IEntry {
   latitude: number | null;
   longitude: number | null;
   address: string | null;
-  // photo?: string;
+  photo: string | null;
   category: ICategory;
 }

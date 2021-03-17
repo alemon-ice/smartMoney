@@ -6,6 +6,7 @@ export const defaultInitalEntry: IEntry = {
   amount: '0.00',
   description: '',
   entryAt: new Date(),
+  photo: null,
   latitude: null,
   longitude: null,
   address: null,

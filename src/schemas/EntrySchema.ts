@@ -9,7 +9,7 @@ const EntrySchema = {
     latitude: 'float?',
     longitude: 'float?',
     address: 'string?',
-    // photo: 'string?',
+    photo: 'string?',
     isInit: 'bool',
     category: 'Category',
   },

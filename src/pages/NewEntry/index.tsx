@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, Modal, ImageBackground } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import DatetimePicker from 'react-native-modal-datetime-picker';
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
+import { RNCamera } from 'react-native-camera';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
   BalanceLabel,
@@ -40,14 +42,38 @@ const NewEntry: React.FC<IProps> = () => {
     longitude: entry.longitude,
     address: entry.address,
   });
+  const [pictureUri, setPictureUri] = useState<string | null>(entry.photo);
+  const [camera, setCamera] = useState<RNCamera | null>(null);
   const [debit, setDebit] = useState(
     checkIfValueIsPositive(Number(amount)) ? 1 : -1,
   );
   const [modalDateIsVisible, setModalDateIsVisible] = useState(false);
+  const [modalCameraIsVisible, setModalCameraIsVisible] = useState(false);
 
   function onChangeDate(date: Date) {
     setEntryAt(date);
     setModalDateIsVisible(false);
+  }
+
+  async function onTakePicture() {
+    try {
+      if (camera) {
+        const { uri } = await camera.takePictureAsync({
+          quality: 0.5,
+          forceUpOrientation: true,
+          fixOrientation: true,
+        });
+
+        setPictureUri(uri);
+      }
+      setModalCameraIsVisible(!modalCameraIsVisible);
+    } catch (err) {
+      console.error(
+        'NewEntryCameraPickerModal :: error on take picture.\n',
+        err,
+      );
+      Alert.alert('Erro', 'Houve um erro ao tirar a foto');
+    }
   }
 
   function onChangeGeolocation() {
@@ -128,6 +154,7 @@ const NewEntry: React.FC<IProps> = () => {
       amount: Number(amount) * debit,
       description: category.name,
       entryAt,
+      photo: pictureUri,
       latitude: geolocation.latitude,
       longitude: geolocation.longitude,
       address: geolocation.address,
@@ -207,6 +234,109 @@ const NewEntry: React.FC<IProps> = () => {
               onConfirm={onChangeDate}
               onCancel={() => setModalDateIsVisible(!modalDateIsVisible)}
             />
+          </CircularButton>
+          <CircularButton
+            icon="photo-camera"
+            color={pictureUri ? colors.blue : colors.asphalt}
+            onPressAction={() => setModalCameraIsVisible(!modalCameraIsVisible)}
+          >
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={modalCameraIsVisible}
+            >
+              {pictureUri ? (
+                <ImageBackground
+                  source={{
+                    uri: pictureUri,
+                  }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                >
+                  <View
+                    style={{
+                      flex: 0,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                      position: 'absolute',
+                      bottom: 16,
+                    }}
+                  >
+                    <Icon
+                      name="delete"
+                      size={50}
+                      color={colors.white}
+                      onPress={() => {
+                        setPictureUri(null);
+                        setModalCameraIsVisible(!modalCameraIsVisible);
+                      }}
+                      style={{
+                        marginLeft: 16,
+                      }}
+                    />
+                    <Icon
+                      name="check"
+                      size={50}
+                      color={colors.white}
+                      onPress={() => {
+                        setModalCameraIsVisible(!modalCameraIsVisible);
+                      }}
+                      style={{
+                        marginRight: 16,
+                      }}
+                    />
+                  </View>
+                </ImageBackground>
+              ) : (
+                <RNCamera
+                  ref={ref => setCamera(ref)}
+                  style={{
+                    flex: 1,
+                  }}
+                  type={RNCamera.Constants.Type.back}
+                  autoFocus={RNCamera.Constants.AutoFocus.on}
+                  // flashMode={RNCamera.Constants.FlashMode.on} // TODO ATIVAR/DESATIVAR FLASH
+                  androidCameraPermissionOptions={{
+                    title: 'Permissão para utilizar câmera',
+                    message:
+                      'Precisamos da sua permissão para utilizar a câmera do seu dispositivo.',
+                    buttonPositive: 'Permitir',
+                    buttonNegative: 'Negar',
+                  }}
+                  captureAudio={false}
+                >
+                  <Icon
+                    name="photo-camera"
+                    size={40}
+                    color={colors.white}
+                    onPress={onTakePicture}
+                    style={{
+                      flex: 0,
+                      alignSelf: 'center',
+                      position: 'absolute',
+                      bottom: 20,
+                    }}
+                  />
+                  <Icon
+                    name="close"
+                    size={50}
+                    color={colors.white}
+                    onPress={() => {
+                      setModalCameraIsVisible(!modalCameraIsVisible);
+                    }}
+                    style={{
+                      flex: 0,
+                      position: 'absolute',
+                      top: 20,
+                      right: 20,
+                    }}
+                  />
+                </RNCamera>
+              )}
+            </Modal>
           </CircularButton>
           <CircularButton
             icon="person-pin"
