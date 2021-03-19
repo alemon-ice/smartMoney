@@ -54,7 +54,7 @@ export const saveEntry = async ({
     realm.write(() => {
       entryData = {
         id: newEntryData.id || currentEntry.id || uuidv4(),
-        amount: newEntryData.amount || currentEntry.amount,
+        amount: newEntryData.amount || currentEntry.amount || 0,
         entryAt: newEntryData.entryAt || currentEntry.entryAt || new Date(),
         description: newEntryData.description || currentEntry.description,
         photo: newEntryData.photo || currentEntry.photo,
