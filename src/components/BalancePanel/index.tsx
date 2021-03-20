@@ -7,6 +7,7 @@ import BalancePanelChart from '../BalancePanelChart';
 import { colors } from '../../styles/colors';
 import { defaultInitalEntry } from '../../util/NewEntryValue';
 import useBalance from '../../hooks/useBalance';
+import Currency from '../Core/Currency';
 
 import { Container, BalancePanelLabel, AddButton } from './styles';
 import { IProps } from './types';
@@ -16,13 +17,12 @@ const BalancePanel: React.FC<IProps> = ({ onNewEntryPress }) => {
 
   return (
     <Container>
-      <LinearGradient
-        colors={[colors.violet, colors.blue]}
-        // style={{ paddingVertical: 10 }}
-      >
+      <LinearGradient colors={[colors.violet, colors.blue]}>
         <BalancePanelLabel>
           <Text style={{ fontSize: 14, color: colors.white }}>Saldo atual</Text>
-          <Text style={{ fontSize: 36, color: colors.white }}>${balance}</Text>
+          <Text style={{ fontSize: 36, color: colors.white }}>
+            <Currency value={balance.toString()} />
+          </Text>
         </BalancePanelLabel>
         <BalancePanelChart />
       </LinearGradient>

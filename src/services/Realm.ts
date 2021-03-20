@@ -1,5 +1,6 @@
 import Realm from 'realm';
 import { Alert } from 'react-native';
+// import { cleanInialized } from './Welcome';
 
 import CategorySchema from '../schemas/CategorySchema';
 import EntrySchema from '../schemas/EntrySchema';
@@ -13,6 +14,7 @@ export const getRealm = async (): Promise<Realm> => {
 
   initDB(realm);
   // dropDB(realm);
+  // cleanInialized();
 
   return realm;
 };

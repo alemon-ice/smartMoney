@@ -4,6 +4,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import Svg, { Circle } from 'react-native-svg';
 
 import Container from '../Core/Container';
+import Currency from '../Core/Currency';
 import EntrySummaryChart from '../EntrySummaryChart';
 import useBalanceSumByCategory from '../../hooks/useBalanceSumByCategory';
 import { colors } from '../../styles/colors';
@@ -61,7 +62,7 @@ const EntrySummary: React.FC<IProps> = ({ days = 7, onPressActionButton }) => {
                     textAlign: 'right',
                   }}
                 >
-                  {entry.amount}
+                  <Currency value={entry.amount} />
                 </Text>
                 <Text />
               </View>

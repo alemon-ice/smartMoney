@@ -4,6 +4,8 @@ import Svg, { Circle, Rect } from 'react-native-svg';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { colors } from '../../../styles/colors';
+import Currency from '../../Core/Currency';
+import moment from '../../../vendors/moment';
 
 import { IProps } from './types';
 import { Container, BulletView, DescriptionView, AmountView } from './styles';
@@ -74,7 +76,7 @@ const EntryListItem: React.FC<IProps> = ({
                 color: colors.metal,
               }}
             >
-              {entry.entryAt.toLocaleString()}
+              {moment(entry.entryAt).calendar()}
             </Text>
             {entry.address && (
               <>
@@ -108,7 +110,7 @@ const EntryListItem: React.FC<IProps> = ({
               color: colors.white,
             }}
           >
-            ${entry.amount}
+            <Currency value={entry.amount.toString()} />
           </Text>
         </AmountView>
       </Container>
