@@ -22,7 +22,7 @@ const EntryListItem: React.FC<IProps> = ({
   const bulletColor = entry.category.color || colors.blue;
 
   return (
-    <TouchableOpacity onPress={() => onEntryPress(entry)}>
+    <TouchableOpacity onPress={() => onEntryPress && onEntryPress(entry)}>
       <Container>
         <BulletView>
           <Svg height="50" width="30">

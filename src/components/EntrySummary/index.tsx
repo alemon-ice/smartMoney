@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Svg, { Circle } from 'react-native-svg';
@@ -12,8 +12,18 @@ import { colors } from '../../styles/colors';
 import { EntrySummaryList, ChartContainer } from './styles';
 import { IProps } from './types';
 
-const EntrySummary: React.FC<IProps> = ({ days = 7, onPressActionButton }) => {
-  const { balanceSum } = useBalanceSumByCategory(days);
+const EntrySummary: React.FC<IProps> = ({
+  days = 7,
+  onPressActionButton,
+  refresh,
+}) => {
+  const [getDays, setDays] = useState(days);
+
+  const { balanceSum } = useBalanceSumByCategory(getDays);
+
+  useEffect(() => {
+    setDays(days);
+  }, [refresh]);
 
   return (
     <Container
@@ -27,7 +37,7 @@ const EntrySummary: React.FC<IProps> = ({ days = 7, onPressActionButton }) => {
         <EntrySummaryList>
           <FlatList
             data={balanceSum}
-            keyExtractor={item => item.category.id}
+            keyExtractor={(_, index) => index.toString()}
             renderItem={({ item: entry }) => (
               <View
                 style={{
@@ -62,7 +72,7 @@ const EntrySummary: React.FC<IProps> = ({ days = 7, onPressActionButton }) => {
                     textAlign: 'right',
                   }}
                 >
-                  <Currency value={entry.amount} />
+                  <Currency value={entry.amount.toString()} />
                 </Text>
                 <Text />
               </View>

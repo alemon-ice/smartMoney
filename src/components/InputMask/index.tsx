@@ -3,48 +3,65 @@ import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 
-import { colors } from '../../styles/colors';
-import { checkIfValueIsPositive } from '../../util/checkNumber';
+import {
+  checkIfValueIsPositive,
+  convertInputMaskValue,
+} from '../../util/numberValues';
 
-import { Container, DebitButton } from './styles';
+import { Container, DebitButton, styles } from './styles';
 import { IProps } from './types';
 
 const InputMask: React.FC<IProps> = ({
   value,
-  onChangeValue,
+  changeValue,
   debit,
   setDebit,
-  ...rest
+  checkCategory,
 }) => {
-  const onChangeDebitCredit = () => {
+  function onChangeDebitCredit() {
     const updateDebit = checkIfValueIsPositive(debit) ? -1 : 1;
     setDebit(updateDebit);
-  };
+
+    const { category, changeCategory } = checkCategory;
+
+    if (
+      (category && category.entryType === 'isCredit' && updateDebit === -1) ||
+      (category && category.entryType === 'isDebit' && updateDebit === 1)
+    ) {
+      changeCategory(null);
+    }
+  }
+
+  function onChangeValue(textValue: string) {
+    const formattedValue = convertInputMaskValue({
+      value: textValue,
+      to: 'string',
+    });
+    changeValue(formattedValue);
+  }
 
   return (
     <Container>
       <TouchableOpacity
-        style={{
-          flexDirection: 'row',
-          padding: 20,
-        }}
+        style={styles.DebitButton}
         onPress={onChangeDebitCredit}
       >
         <DebitButton>{!checkIfValueIsPositive(debit) && '-'}</DebitButton>
         <DebitButton>R$</DebitButton>
       </TouchableOpacity>
       <TextInputMask
-        style={{
-          flex: 1,
-          fontSize: 28,
-          color: colors.white,
-          textAlign: 'right',
-          paddingRight: 20,
+        type="money"
+        options={{
+          precision: 2,
+          separator: ',',
+          delimiter: '.',
+          unit: '',
+          suffixUnit: '',
         }}
+        style={styles.InputMask}
         value={value}
         includeRawValueInChangeText
-        onChangeText={(_, rawValue) => onChangeValue(`${rawValue}`)}
-        {...rest}
+        onChangeText={onChangeValue}
       />
     </Container>
   );

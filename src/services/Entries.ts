@@ -6,11 +6,6 @@ import { moment } from '../vendors';
 import { IEntry } from '../interfaces/entry';
 import { ICategory } from '../interfaces/category';
 
-interface ISaveEntryProps {
-  currentEntry: IEntry;
-  newEntryData: IEntry;
-}
-
 export const getEntries = async (
   days: number,
   category?: ICategory,
@@ -27,25 +22,15 @@ export const getEntries = async (
 
     return entries;
   }
-  console.log(category);
   const entries: IEntry[] = realm
     .objects('Entry')
-    // .filtered('entryAt >= $0', date)
-    // .filtered('category == $0', category)
-    .filtered(
-      `entryAt >= ${date} && category == ${{
-        id: category.id,
-      }}`,
-    )
+    .filtered(`entryAt >= $0 && category.id == $1`, date, category.id)
     .toJSON();
 
   return entries;
 };
 
-export const saveEntry = async ({
-  currentEntry,
-  newEntryData,
-}: ISaveEntryProps): Promise<IEntry | null> => {
+export const saveEntry = async (entry: IEntry): Promise<IEntry | null> => {
   const realm = await getRealm();
 
   let entryData = {} as IEntry;
@@ -53,16 +38,16 @@ export const saveEntry = async ({
   try {
     realm.write(() => {
       entryData = {
-        id: newEntryData.id || currentEntry.id || uuidv4(),
-        amount: newEntryData.amount || currentEntry.amount || 0,
-        entryAt: newEntryData.entryAt || currentEntry.entryAt || new Date(),
-        description: newEntryData.description || currentEntry.description,
-        photo: newEntryData.photo || currentEntry.photo,
-        latitude: newEntryData.latitude || currentEntry.latitude,
-        longitude: newEntryData.longitude || currentEntry.longitude,
-        address: newEntryData.address || currentEntry.address,
+        id: entry.id || uuidv4(),
+        amount: entry.amount || 0,
+        entryAt: entry.entryAt || new Date(),
+        description: entry.description || entry.category.name,
+        photo: entry.photo,
+        latitude: entry.latitude,
+        longitude: entry.longitude,
+        address: entry.address,
+        category: entry.category,
         isInit: false,
-        category: newEntryData.category || currentEntry.category,
       };
 
       realm.create(

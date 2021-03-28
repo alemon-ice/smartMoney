@@ -15,3 +15,8 @@ export const defaultInitalEntry: IEntry = {
     name: 'Selecionar categoria',
   } as ICategory,
 };
+
+export const nullCategoryValue = {
+  id: '',
+  name: 'Selecionar categoria',
+} as ICategory;

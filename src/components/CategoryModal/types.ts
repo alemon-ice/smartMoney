@@ -4,5 +4,6 @@ export interface IProps {
   debit?: number;
   modalIsVisible: boolean;
   onClose(value: boolean): void;
-  onChangeCategory(category: ICategory): void;
+  onChangeCategory(category: ICategory | null): void;
+  hasSelectedCategory: boolean;
 }

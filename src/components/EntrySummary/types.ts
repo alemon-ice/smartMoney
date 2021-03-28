@@ -1,4 +1,5 @@
 export interface IProps {
   days?: number;
-  onPressActionButton: () => void;
+  onPressActionButton?: () => void;
+  refresh: number;
 }

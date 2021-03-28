@@ -46,7 +46,7 @@ const Container: React.FC<IProps> = ({
               {actionLabelText}
             </Text>
           )}
-          {actionButtonText && (
+          {actionButtonText && onPressActionButton && (
             <TouchableOpacity
               style={{ flexDirection: 'row' }}
               onPress={onPressActionButton}

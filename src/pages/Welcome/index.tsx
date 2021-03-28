@@ -31,7 +31,7 @@ const Welcome: React.FC = () => {
       photo: null,
     };
 
-    saveEntry({ currentEntry: initialEntry, newEntryData: initialEntry });
+    saveEntry(initialEntry);
 
     await setInialized();
     navigate('Main');
@@ -73,15 +73,7 @@ const Welcome: React.FC = () => {
       </View>
       <View>
         <InputMask
-          type="money"
-          options={{
-            precision: 2,
-            separator: ',',
-            delimiter: '.',
-            unit: '',
-            suffixUnit: '',
-          }}
-          onChangeValue={setAmount}
+          changeValue={setAmount}
           value={amount}
           debit={1}
           setDebit={debit => debit}

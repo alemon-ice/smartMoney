@@ -5,14 +5,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import { colors } from '../../styles/colors';
 import useBalance from '../../hooks/useBalance';
 
-// import { IProps } from './types';
-
 const BalanceLabel: React.FC = () => {
   const { balance } = useBalance();
+
   return (
     <View
       style={{
-        // flex: 1,
         alignItems: 'center',
         padding: 20,
       }}

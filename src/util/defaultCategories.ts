@@ -9,7 +9,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#1abc9c',
       entryType: 'isDebit',
       order: 0,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -17,7 +16,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#2ecc71',
       entryType: 'isDebit',
       order: 1,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -25,7 +23,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#3498db',
       entryType: 'isDebit',
       order: 2,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -33,7 +30,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#9b59b6',
       entryType: 'isDebit',
       order: 3,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -41,7 +37,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#f1c40f',
       entryType: 'isDebit',
       order: 4,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -49,7 +44,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#f39c12',
       entryType: 'isDebit',
       order: 5,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -57,7 +51,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#e67e22',
       entryType: 'isDebit',
       order: 6,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -65,7 +58,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#d35400',
       entryType: 'isDebit',
       order: 7,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -73,7 +65,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#e74c3c',
       entryType: 'isDebit',
       order: 8,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -81,7 +72,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#c0392b',
       entryType: 'isDebit',
       order: 9,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -89,7 +79,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#ecf0f1',
       entryType: 'isDebit',
       order: 10,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -97,7 +86,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#bdc3c7',
       entryType: 'isDebit',
       order: 11,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -105,7 +93,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#95a5a6',
       entryType: 'isDebit',
       order: 12,
-      entries: [],
     },
   ],
   creditCategories: [
@@ -115,7 +102,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#273c75',
       entryType: 'isCredit',
       order: 1,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -123,7 +109,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#4cd137',
       entryType: 'isCredit',
       order: 2,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -131,7 +116,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#487eb0',
       entryType: 'isCredit',
       order: 3,
-      entries: [],
     },
     {
       id: uuidv4(),
@@ -139,7 +123,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#8c7ae6',
       entryType: 'isCredit',
       order: 4,
-      entries: [],
     },
   ],
   initialCategories: [
@@ -149,7 +132,6 @@ export const defaultCategories: { [categoriesType: string]: ICategory[] } = {
       color: '#27ae60',
       entryType: 'isInit',
       order: 5,
-      entries: [],
     },
   ],
 };

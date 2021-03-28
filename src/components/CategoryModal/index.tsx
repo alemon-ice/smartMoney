@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, Modal, FlatList } from 'react-native';
 
-import { isCreditOrDebit } from '../../util/checkNumber';
+import { isCreditOrDebit } from '../../util/numberValues';
 import ActionFooter, { ActionButton } from '../Core/ActionFooter';
 import { colors } from '../../styles/colors';
 import useCategories from '../../hooks/useCategories';
@@ -14,6 +14,7 @@ const CategoryModal: React.FC<IProps> = ({
   modalIsVisible,
   onClose,
   onChangeCategory,
+  hasSelectedCategory,
 }) => {
   const categories = useCategories();
 
@@ -51,13 +52,28 @@ const CategoryModal: React.FC<IProps> = ({
             </TouchableOpacity>
           )}
         />
-        <ActionFooter>
-          <ActionButton
-            type="primary"
-            title="Fechar"
-            onPress={() => onClose(!modalIsVisible)}
-          />
-        </ActionFooter>
+        {hasSelectedCategory ? (
+          <ActionFooter>
+            <ActionButton
+              type="primary"
+              title="Limpar"
+              onPress={() => onChangeCategory(null)}
+            />
+            <ActionButton
+              type="secondary"
+              title="Fechar"
+              onPress={() => onClose(!modalIsVisible)}
+            />
+          </ActionFooter>
+        ) : (
+          <ActionFooter>
+            <ActionButton
+              type="primary"
+              title="Fechar"
+              onPress={() => onClose(!modalIsVisible)}
+            />
+          </ActionFooter>
+        )}
       </ModalContainer>
     </Modal>
   );

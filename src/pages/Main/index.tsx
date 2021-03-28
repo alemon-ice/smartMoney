@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
+import { RefreshControl, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView } from 'react-native';
 
 import { BalancePanel, EntrySummary, EntryList } from '../../components';
 import { IEntry } from '../../interfaces/entry';
@@ -9,9 +9,12 @@ import { Container } from './styles';
 const Main: React.FC = () => {
   const { navigate } = useNavigation();
 
+  const [refresh, setRefresh] = useState(false);
+  const [trigger, setTrigger] = useState(Math.random());
+
   const onNewEntryPress = useCallback(
     (entry: IEntry) => {
-      navigate('NewEntry', { entry });
+      navigate('NewEntry', { currentEntry: entry });
     },
     [navigate],
   );
@@ -20,14 +23,31 @@ const Main: React.FC = () => {
     navigate('Report');
   }, [navigate]);
 
+  function onRefresh() {
+    setRefresh(true);
+
+    setTimeout(() => {
+      setTrigger(Math.random());
+    }, 300);
+    setRefresh(false);
+  }
+
   return (
     <Container>
       <BalancePanel onNewEntryPress={onNewEntryPress} />
-      <ScrollView>
-        <EntrySummary onPressActionButton={onPressActionButton} />
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+        }
+      >
+        <EntrySummary
+          onPressActionButton={onPressActionButton}
+          refresh={trigger}
+        />
         <EntryList
           onEntryPress={onNewEntryPress}
           onPressActionButton={onPressActionButton}
+          refresh={trigger}
         />
       </ScrollView>
     </Container>

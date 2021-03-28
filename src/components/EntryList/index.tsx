@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 
 import Container from '../Core/Container';
@@ -12,8 +12,15 @@ const EntryList: React.FC<IProps> = ({
   category,
   onEntryPress,
   onPressActionButton,
+  refresh,
 }) => {
-  const { entries } = useEntries(days, category);
+  const [getDays, setDays] = useState(days);
+
+  const { entries } = useEntries(getDays, category);
+
+  useEffect(() => {
+    setDays(days);
+  }, [refresh]);
 
   return (
     <Container
@@ -30,7 +37,7 @@ const EntryList: React.FC<IProps> = ({
             entry={entry}
             isFirstItem={index === 0}
             isLastItem={index === entries.length - 1}
-            onEntryPress={onEntryPress}
+            onEntryPress={onEntryPress && onEntryPress}
           />
         )}
       />

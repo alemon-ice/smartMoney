@@ -7,7 +7,6 @@ const CategorySchema = {
     color: 'string',
     entryType: 'string',
     order: { type: 'int', default: 0 },
-    entries: 'Entry[]',
   },
 };
 

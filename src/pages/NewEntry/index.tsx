@@ -1,167 +1,104 @@
 import React, { useState } from 'react';
-import { View, Alert, Modal, ImageBackground } from 'react-native';
+import { View, Alert, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import DatetimePicker from 'react-native-modal-datetime-picker';
-import Geolocation from '@react-native-community/geolocation';
-import Geocoder from 'react-native-geocoding';
-import { RNCamera } from 'react-native-camera';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
   BalanceLabel,
   InputMask,
-  InputPicker,
+  TextInput,
   CircularButton,
 } from '../../components';
 import ActionFooter, { ActionButton } from '../../components/Core/ActionFooter';
+import CategoryInputPicker from './CategoryInputPicker';
+import DatePickerButton from './DatePickerButton';
+import TakePictureButton from './TakePictureButton';
+import GetLocationButton from './GetLocationButton';
 
+import { IGeolocation } from './GetLocationButton/types';
 import { IEntry } from '../../interfaces/entry';
 import { ICategory } from '../../interfaces/category';
-import { checkIfValueIsPositive } from '../../util/checkNumber';
+import {
+  checkIfValueIsPositive,
+  convertInputMaskValue,
+} from '../../util/numberValues';
+import { nullCategoryValue } from '../../util/NewEntryValue';
 import { colors } from '../../styles/colors';
 import useEntries from '../../hooks/useEntries';
 
-import { Container } from './styles';
+import { styles } from './styles';
 import { IProps } from './types';
 
 const NewEntry: React.FC<IProps> = () => {
   const { goBack } = useNavigation();
   const { params } = useRoute();
-  const { entry } = params as IProps;
+  const { currentEntry } = params as IProps;
   const { saveEntry, removeEntry } = useEntries();
 
-  const [amount, setAmount] = useState<string>(`${entry.amount}`);
-  const [category, setCategory] = useState<ICategory>(entry.category);
-  const [entryAt, setEntryAt] = useState<Date>(entry.entryAt);
-  const [geolocation, setGeolocation] = useState<{
-    latitude: number | null;
-    longitude: number | null;
-    address: string | null;
-  }>({
-    latitude: entry.latitude,
-    longitude: entry.longitude,
-    address: entry.address,
+  const [amount, setAmount] = useState<string>(`${currentEntry.amount}`);
+  const [description, setDescription] = useState<string>(
+    currentEntry.description,
+  );
+  const [entryAt, setEntryAt] = useState<Date>(currentEntry.entryAt);
+  const [geolocation, setGeolocation] = useState<IGeolocation>({
+    latitude: currentEntry.latitude,
+    longitude: currentEntry.longitude,
+    address: currentEntry.address,
   });
-  const [pictureUri, setPictureUri] = useState<string | null>(entry.photo);
-  const [camera, setCamera] = useState<RNCamera | null>(null);
+  const [category, setCategory] = useState<ICategory>(currentEntry.category);
+  const [imageUri, setImageUri] = useState<string | null>(currentEntry.photo);
+
   const [debit, setDebit] = useState(
     checkIfValueIsPositive(Number(amount)) ? 1 : -1,
   );
-  const [modalDateIsVisible, setModalDateIsVisible] = useState(false);
-  const [modalCameraIsVisible, setModalCameraIsVisible] = useState(false);
 
-  function onChangeDate(date: Date) {
-    setEntryAt(date);
-    setModalDateIsVisible(false);
+  function handleChangeAmount(value: string) {
+    setAmount(value);
   }
 
-  async function onTakePicture() {
-    try {
-      if (camera) {
-        const { uri } = await camera.takePictureAsync({
-          quality: 0.5,
-          forceUpOrientation: true,
-          fixOrientation: true,
-        });
-
-        setPictureUri(uri);
-      }
-      setModalCameraIsVisible(!modalCameraIsVisible);
-    } catch (err) {
-      console.error(
-        'NewEntryCameraPickerModal :: error on take picture.\n',
-        err,
-      );
-      Alert.alert('Erro', 'Houve um erro ao tirar a foto');
-    }
+  function handleChangeDescription(value: string) {
+    setDescription(value);
   }
 
-  function onChangeGeolocation() {
-    if (geolocation.address) {
-      Alert.alert('Localização', geolocation.address, [
-        {
-          text: 'Apagar',
-          onPress: () =>
-            setGeolocation({ latitude: null, longitude: null, address: null }),
-        },
-        {
-          text: 'OK',
-        },
-      ]);
+  function handleChangeCategory(value: ICategory | null) {
+    if (value) {
+      setCategory(value);
     } else {
-      getPosition();
+      setCategory(nullCategoryValue);
     }
   }
 
-  function getPosition() {
-    Geolocation.getCurrentPosition(
-      pos => {
-        const { latitude } = pos.coords;
-        const { longitude } = pos.coords;
-
-        getLocation(latitude, longitude);
-      },
-      error => {
-        console.error(
-          'NewEntryAddressPicker :: erro ao recuperar a posição.\n',
-          error,
-        );
-      },
-    );
+  function handleChangeDate(date: Date) {
+    setEntryAt(date);
   }
 
-  function getLocation(latitude: number, longitude: number) {
-    Geocoder.init('AIzaSyAwVtYi0SCsTW0n-ZIpoV_qqGmTU0KEnMk');
+  function handleChangeImageUri(newImageUri: string | null) {
+    setImageUri(newImageUri);
+  }
 
-    Geocoder.from({ latitude, longitude })
-      .then(json => {
-        const formattedAddress = json.results[0].formatted_address;
-        Alert.alert('Endereço', formattedAddress, [
-          {
-            text: 'Cancelar',
-            style: 'cancel',
-          },
-          {
-            text: 'Confirmar',
-            onPress: () =>
-              setGeolocation({
-                latitude,
-                longitude,
-                address: formattedAddress,
-              }),
-          },
-        ]);
-      })
-      .catch(error => {
-        console.error(
-          'GetLocation :: erro ao recuperar a localização.\n',
-          error,
-        );
-        Alert.alert(
-          'Houve um erro ao recuperar sua posição, por favor verifique se você autorizou o acesso à sua localização.',
-        );
-      });
+  function handleChangeGeolocation(newGeolocation: IGeolocation) {
+    setGeolocation(newGeolocation);
   }
 
   function isValidForm() {
-    if (parseFloat(amount) !== 0) return true;
+    if (parseFloat(amount) === 0) return false;
+    if (!category) return false;
 
-    return false;
+    return true;
   }
 
   async function handleSave() {
-    const newEntry: IEntry = {
+    const entry: IEntry = {
       amount: Number(amount) * debit,
-      description: category.name,
+      description,
       entryAt,
-      photo: pictureUri,
       latitude: geolocation.latitude,
       longitude: geolocation.longitude,
       address: geolocation.address,
+      photo: imageUri,
       category,
     };
 
-    await saveEntry({ currentEntry: entry, newEntryData: newEntry });
+    await saveEntry(entry);
 
     goBack();
   }
@@ -175,7 +112,7 @@ const NewEntry: React.FC<IProps> = () => {
         {
           text: 'Sim',
           onPress: async () => {
-            await removeEntry(entry);
+            await removeEntry(currentEntry);
             goBack();
           },
         },
@@ -185,183 +122,62 @@ const NewEntry: React.FC<IProps> = () => {
   }
 
   return (
-    <Container>
-      <BalanceLabel />
+    <ScrollView>
+      <View style={styles.container}>
+        <BalanceLabel />
 
-      <View
-        style={{
-          flex: 1,
-          paddingVertical: 20,
-        }}
-      >
-        <InputMask
-          type="money"
-          options={{
-            precision: 2,
-            separator: ',',
-            delimiter: '.',
-            unit: '',
-            suffixUnit: '',
-          }}
-          onChangeValue={setAmount}
-          value={amount}
-          debit={debit}
-          setDebit={setDebit}
-        />
-        <InputPicker
-          debit={debit}
-          category={category}
-          setCategory={setCategory}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginVertical: 10,
-            marginHorizontal: 20,
-          }}
-        >
-          <CircularButton
-            icon="today"
-            color={colors.asphalt}
-            onPressAction={() => setModalDateIsVisible(!modalDateIsVisible)}
-          >
-            <DatetimePicker
-              isVisible={modalDateIsVisible}
-              mode="date"
-              isDarkModeEnabled
-              date={entryAt}
-              onConfirm={onChangeDate}
-              onCancel={() => setModalDateIsVisible(!modalDateIsVisible)}
-            />
-          </CircularButton>
-          <CircularButton
-            icon="photo-camera"
-            color={pictureUri ? colors.blue : colors.asphalt}
-            onPressAction={() => setModalCameraIsVisible(!modalCameraIsVisible)}
-          >
-            <Modal
-              animationType="slide"
-              transparent={false}
-              visible={modalCameraIsVisible}
-            >
-              {pictureUri ? (
-                <ImageBackground
-                  source={{
-                    uri: pictureUri,
-                  }}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                  }}
-                >
-                  <View
-                    style={{
-                      flex: 0,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      width: '100%',
-                      position: 'absolute',
-                      bottom: 16,
-                    }}
-                  >
-                    <Icon
-                      name="delete"
-                      size={50}
-                      color={colors.white}
-                      onPress={() => {
-                        setPictureUri(null);
-                        setModalCameraIsVisible(!modalCameraIsVisible);
-                      }}
-                      style={{
-                        marginLeft: 16,
-                      }}
-                    />
-                    <Icon
-                      name="check"
-                      size={50}
-                      color={colors.white}
-                      onPress={() => {
-                        setModalCameraIsVisible(!modalCameraIsVisible);
-                      }}
-                      style={{
-                        marginRight: 16,
-                      }}
-                    />
-                  </View>
-                </ImageBackground>
-              ) : (
-                <RNCamera
-                  ref={ref => setCamera(ref)}
-                  style={{
-                    flex: 1,
-                  }}
-                  type={RNCamera.Constants.Type.back}
-                  autoFocus={RNCamera.Constants.AutoFocus.on}
-                  // flashMode={RNCamera.Constants.FlashMode.on} // TODO ATIVAR/DESATIVAR FLASH
-                  androidCameraPermissionOptions={{
-                    title: 'Permissão para utilizar câmera',
-                    message:
-                      'Precisamos da sua permissão para utilizar a câmera do seu dispositivo.',
-                    buttonPositive: 'Permitir',
-                    buttonNegative: 'Negar',
-                  }}
-                  captureAudio={false}
-                >
-                  <Icon
-                    name="photo-camera"
-                    size={40}
-                    color={colors.white}
-                    onPress={onTakePicture}
-                    style={{
-                      flex: 0,
-                      alignSelf: 'center',
-                      position: 'absolute',
-                      bottom: 20,
-                    }}
-                  />
-                  <Icon
-                    name="close"
-                    size={50}
-                    color={colors.white}
-                    onPress={() => {
-                      setModalCameraIsVisible(!modalCameraIsVisible);
-                    }}
-                    style={{
-                      flex: 0,
-                      position: 'absolute',
-                      top: 20,
-                      right: 20,
-                    }}
-                  />
-                </RNCamera>
-              )}
-            </Modal>
-          </CircularButton>
-          <CircularButton
-            icon="person-pin"
-            color={geolocation.address ? colors.blue : colors.asphalt}
-            onPressAction={onChangeGeolocation}
+        <View style={styles.formView}>
+          <InputMask
+            changeValue={handleChangeAmount}
+            value={convertInputMaskValue({ value: amount, to: 'number' })}
+            debit={debit}
+            setDebit={setDebit}
+            checkCategory={{
+              category,
+              changeCategory: handleChangeCategory,
+            }}
           />
-          {entry.id && (
-            <CircularButton
-              icon="delete"
-              color={colors.red}
-              onPressAction={handleRemove}
+          <TextInput
+            placeholder="descrição curta (opcional)"
+            maxLength={28}
+            value={description}
+            onChangeValue={handleChangeDescription}
+          />
+          <CategoryInputPicker
+            debit={debit}
+            category={category}
+            changeCategory={handleChangeCategory}
+          />
+          <View style={styles.circularButtons}>
+            <DatePickerButton date={entryAt} changeDate={handleChangeDate} />
+            <TakePictureButton
+              imageUri={imageUri}
+              changeImageUri={handleChangeImageUri}
             />
-          )}
+            <GetLocationButton
+              geolocation={geolocation}
+              changeGeolocation={handleChangeGeolocation}
+            />
+            {currentEntry.id && (
+              <CircularButton
+                icon="delete"
+                color={colors.red}
+                onPressAction={handleRemove}
+              />
+            )}
+          </View>
         </View>
-      </View>
 
-      <ActionFooter>
-        <ActionButton
-          type="primary"
-          title={entry.id ? 'Salvar' : 'Adicionar'}
-          onPress={() => isValidForm() && handleSave()}
-        />
-        <ActionButton title="Cancelar" onPress={goBack} />
-      </ActionFooter>
-    </Container>
+        <ActionFooter>
+          <ActionButton
+            type="primary"
+            title={currentEntry.id ? 'Salvar' : 'Adicionar'}
+            onPress={() => isValidForm() && handleSave()}
+          />
+          <ActionButton title="Cancelar" onPress={goBack} />
+        </ActionFooter>
+      </View>
+    </ScrollView>
   );
 };
 

@@ -37,7 +37,7 @@ const Report: React.FC = () => {
   );
 
   const handleChangeCategory = useCallback(
-    (categoryValue: ICategory) => {
+    (categoryValue: ICategory | undefined) => {
       setCategory(categoryValue);
       setModalCategoryIsVisible(!modalCategoryIsVisible);
     },
@@ -130,17 +130,9 @@ const Report: React.FC = () => {
         />
       </View>
 
+      <EntrySummary days={relativeDays} />
       <ScrollView>
-        <EntrySummary
-          days={relativeDays}
-          onPressActionButton={() => console.log('')}
-        />
-        <EntryList
-          days={relativeDays}
-          category={category}
-          onEntryPress={() => console.log('')}
-          onPressActionButton={() => console.log('')}
-        />
+        <EntryList days={relativeDays} category={category} />
       </ScrollView>
       <ActionFooter>
         <ActionButton type="primary" title="Fechar" onPress={goBack} />
