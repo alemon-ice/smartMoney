@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Svg, { Circle } from 'react-native-svg';
@@ -12,18 +12,8 @@ import { colors } from '../../styles/colors';
 import { EntrySummaryList, ChartContainer } from './styles';
 import { IProps } from './types';
 
-const EntrySummary: React.FC<IProps> = ({
-  days = 7,
-  onPressActionButton,
-  refresh,
-}) => {
-  const [getDays, setDays] = useState(days);
-
-  const { balanceSum } = useBalanceSumByCategory(getDays);
-
-  useEffect(() => {
-    setDays(days);
-  }, [refresh]);
+const EntrySummary: React.FC<IProps> = ({ days = 7, onPressActionButton }) => {
+  const { balanceSum } = useBalanceSumByCategory(days);
 
   return (
     <Container
@@ -42,6 +32,8 @@ const EntrySummary: React.FC<IProps> = ({
               <View
                 style={{
                   flexDirection: 'row',
+                  marginVertical: 2,
+                  marginRight: 1,
                 }}
               >
                 <Svg height="20" width="22">

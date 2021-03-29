@@ -22,13 +22,15 @@ const InputMask: React.FC<IProps> = ({
     const updateDebit = checkIfValueIsPositive(debit) ? -1 : 1;
     setDebit(updateDebit);
 
-    const { category, changeCategory } = checkCategory;
+    if (checkCategory) {
+      const { category, changeCategory } = checkCategory;
 
-    if (
-      (category && category.entryType === 'isCredit' && updateDebit === -1) ||
-      (category && category.entryType === 'isDebit' && updateDebit === 1)
-    ) {
-      changeCategory(null);
+      if (
+        (category && category.entryType === 'isCredit' && updateDebit === -1) ||
+        (category && category.entryType === 'isDebit' && updateDebit === 1)
+      ) {
+        changeCategory(null);
+      }
     }
   }
 

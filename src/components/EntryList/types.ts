@@ -6,5 +6,4 @@ export interface IProps {
   category?: ICategory;
   onEntryPress?: (entry: IEntry) => void;
   onPressActionButton?: () => void;
-  refresh: number;
 }

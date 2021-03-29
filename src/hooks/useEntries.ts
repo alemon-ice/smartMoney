@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 
 import { getEntries, saveEntry, removeEntry } from '../services/Entries';
 import { IEntry } from '../interfaces/entry';
-import { ICategory } from '../interfaces/category';
+import { nullCategoryValue } from '../util/NewEntryValue';
 
 const useEntries = (
   days = 7,
-  category?: ICategory,
+  category = nullCategoryValue,
 ): {
   entries: IEntry[];
   saveEntry: typeof saveEntry;

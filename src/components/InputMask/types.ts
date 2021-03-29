@@ -5,7 +5,7 @@ export interface IProps {
   value: string;
   setDebit(debit: number): void;
   changeValue(value: string): void;
-  checkCategory: {
+  checkCategory?: {
     category: ICategory | null;
     changeCategory(category: ICategory | null): void;
   };

@@ -88,6 +88,7 @@ const NewEntry: React.FC<IProps> = () => {
 
   async function handleSave() {
     const entry: IEntry = {
+      id: currentEntry.id,
       amount: Number(amount) * debit,
       description,
       entryAt,

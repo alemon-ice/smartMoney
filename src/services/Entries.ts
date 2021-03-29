@@ -8,13 +8,13 @@ import { ICategory } from '../interfaces/category';
 
 export const getEntries = async (
   days: number,
-  category?: ICategory,
+  category: ICategory,
 ): Promise<IEntry[]> => {
   const realm = await getRealm();
 
   const date = moment().subtract(days, 'days').toDate();
 
-  if (!category) {
+  if (!category.id) {
     const entries: IEntry[] = realm
       .objects('Entry')
       .filtered('entryAt >= $0', date)

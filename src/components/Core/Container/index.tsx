@@ -33,6 +33,7 @@ const Container: React.FC<IProps> = ({
         <View
           style={{
             flexDirection: 'row',
+            marginTop: 10,
           }}
         >
           {actionLabelText && (

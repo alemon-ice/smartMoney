@@ -14,9 +14,11 @@ import ActionFooter, { ActionButton } from '../../components/Core/ActionFooter';
 import { Container } from './styles';
 import { colors } from '../../styles/colors';
 import { ICategory } from '../../interfaces/category';
+import { nullCategoryValue } from '../../util/NewEntryValue';
+import { IEntry } from '../../interfaces/entry';
 
 const Report: React.FC = () => {
-  const { goBack } = useNavigation();
+  const { navigate, goBack } = useNavigation();
 
   const [
     modalRelativeDaysIsVisible,
@@ -26,7 +28,7 @@ const Report: React.FC = () => {
   const [modalCategoryIsVisible, setModalCategoryIsVisible] = useState<boolean>(
     false,
   );
-  const [category, setCategory] = useState<ICategory | undefined>();
+  const [category, setCategory] = useState<ICategory>(nullCategoryValue);
 
   const handleChangeRelativeDays = useCallback(
     (relativeDaysValue: number) => {
@@ -37,11 +39,22 @@ const Report: React.FC = () => {
   );
 
   const handleChangeCategory = useCallback(
-    (categoryValue: ICategory | undefined) => {
-      setCategory(categoryValue);
+    (categoryValue: ICategory | null) => {
+      if (categoryValue) {
+        setCategory(categoryValue);
+      } else {
+        setCategory(nullCategoryValue);
+      }
       setModalCategoryIsVisible(!modalCategoryIsVisible);
     },
     [modalCategoryIsVisible],
+  );
+
+  const onEntryPress = useCallback(
+    (entry: IEntry) => {
+      navigate('NewEntry', { currentEntry: entry });
+    },
+    [navigate],
   );
 
   return (
@@ -115,7 +128,7 @@ const Report: React.FC = () => {
               textAlign: 'center',
             }}
           >
-            {!category ? 'Todas Categorias' : category.name}
+            {!category.id ? 'Todas Categorias' : category.name}
           </Text>
           <Icon
             name="keyboard-arrow-down"
@@ -127,12 +140,17 @@ const Report: React.FC = () => {
           modalIsVisible={modalCategoryIsVisible}
           onClose={setModalCategoryIsVisible}
           onChangeCategory={handleChangeCategory}
+          hasSelectedCategory={!!category.id}
         />
       </View>
 
-      <EntrySummary days={relativeDays} />
       <ScrollView>
-        <EntryList days={relativeDays} category={category} />
+        <EntrySummary days={relativeDays} />
+        <EntryList
+          days={relativeDays}
+          category={category}
+          onEntryPress={onEntryPress}
+        />
       </ScrollView>
       <ActionFooter>
         <ActionButton type="primary" title="Fechar" onPress={goBack} />

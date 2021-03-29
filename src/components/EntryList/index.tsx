@@ -1,26 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FlatList } from 'react-native';
 
 import Container from '../Core/Container';
 import useEntries from '../../hooks/useEntries';
+import { nullCategoryValue } from '../../util/NewEntryValue';
 
 import EntryListItem from './EntryListItem';
 import { IProps } from './types';
 
 const EntryList: React.FC<IProps> = ({
   days = 7,
-  category,
+  category = nullCategoryValue,
   onEntryPress,
   onPressActionButton,
-  refresh,
 }) => {
-  const [getDays, setDays] = useState(days);
-
-  const { entries } = useEntries(getDays, category);
-
-  useEffect(() => {
-    setDays(days);
-  }, [refresh]);
+  const { entries } = useEntries(days, category);
 
   return (
     <Container
