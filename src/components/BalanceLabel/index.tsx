@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import { colors } from '../../styles/colors';
 import useBalance from '../../hooks/useBalance';
+import Currency from '../Core/Currency';
 
 const BalanceLabel: React.FC = () => {
   const { balance } = useBalance();
@@ -38,7 +39,7 @@ const BalanceLabel: React.FC = () => {
             color: colors.white,
           }}
         >
-          ${balance}
+          <Currency value={balance.toString()} />
         </Text>
       </LinearGradient>
     </View>

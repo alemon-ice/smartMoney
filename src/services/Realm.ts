@@ -38,7 +38,15 @@ export const initDB = (realm: Realm): void => {
   }
 };
 
-export const dropDB = (realm: Realm): void => {
+const dropDB = (realm: Realm): void => {
+  console.log(`dropDB :: dropping db...`);
+  realm.write(() => {
+    realm.deleteAll();
+  });
+};
+
+export const clearDB = async (): Promise<void> => {
+  const realm = await getRealm();
   console.log(`dropDB :: dropping db...`);
   realm.write(() => {
     realm.deleteAll();

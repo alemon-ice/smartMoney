@@ -62,29 +62,41 @@ const EntryListItem: React.FC<IProps> = ({
               alignItems: 'center',
             }}
           >
-            <Icon
+            <View
               style={{
-                color: colors.metal,
-                marginRight: 2,
-              }}
-              name="access-time"
-              size={12}
-            />
-            <Text
-              style={{
-                fontSize: 12,
-                color: colors.metal,
+                flexDirection: 'row',
               }}
             >
-              {moment(entry.entryAt).calendar()}
-            </Text>
+              <Icon
+                style={{
+                  color: colors.metal,
+                  marginTop: 2,
+                  marginRight: 2,
+                }}
+                name="access-time"
+                size={12}
+              />
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: colors.metal,
+                }}
+              >
+                {moment(entry.entryAt).calendar()}
+              </Text>
+            </View>
             {entry.address && (
-              <>
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}
+              >
                 <Icon
                   style={{
                     color: colors.metal,
+                    marginTop: 2,
                     marginRight: 2,
-                    marginLeft: 2,
+                    marginLeft: 6,
                   }}
                   name="person-pin"
                   size={12}
@@ -95,9 +107,9 @@ const EntryListItem: React.FC<IProps> = ({
                     color: colors.metal,
                   }}
                 >
-                  Localização
+                  {`${entry.address.substr(0, 18)}...`}
                 </Text>
-              </>
+              </View>
             )}
           </View>
         </DescriptionView>

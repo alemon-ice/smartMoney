@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { getEntries, saveEntry, removeEntry } from '../services/Entries';
 import { IEntry } from '../interfaces/entry';
@@ -14,12 +15,14 @@ const useEntries = (
 } => {
   const [entries, setEntries] = useState<IEntry[]>([]);
 
-  useEffect(() => {
-    (async () => {
-      const entriesResponse = await getEntries(days, category);
-      setEntries(entriesResponse);
-    })();
-  }, [days, category]);
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        const entriesResponse = await getEntries(days, category);
+        setEntries(entriesResponse);
+      })();
+    }, [days, category]),
+  );
 
   return { entries, saveEntry, removeEntry };
 };

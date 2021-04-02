@@ -2,7 +2,7 @@ import { ICategory } from './category';
 
 export interface IEntry {
   id?: string | null;
-  amount: number | string;
+  amount: number;
   description: string;
   entryAt: Date;
   isInit?: boolean;

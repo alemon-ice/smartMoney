@@ -14,7 +14,7 @@ import { IEntry } from '../../interfaces/entry';
 import { Container } from './styles';
 
 const Welcome: React.FC = () => {
-  const { goBack } = useNavigation();
+  const { navigate } = useNavigation();
   const { isInit } = useCategories();
   const [amount, setAmount] = useState<string>('0.00');
 
@@ -34,7 +34,7 @@ const Welcome: React.FC = () => {
     saveEntry(initialEntry);
 
     await setInialized();
-    goBack();
+    navigate('Main');
   }
 
   return (

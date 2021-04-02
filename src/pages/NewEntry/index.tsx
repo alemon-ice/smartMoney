@@ -34,7 +34,7 @@ const NewEntry: React.FC<IProps> = () => {
   const { currentEntry } = params as IProps;
   const { saveEntry, removeEntry } = useEntries();
 
-  const [amount, setAmount] = useState<string>(`${currentEntry.amount}`);
+  const [amount, setAmount] = useState<string>(currentEntry.amount.toString());
   const [description, setDescription] = useState<string>(
     currentEntry.description,
   );
@@ -87,9 +87,18 @@ const NewEntry: React.FC<IProps> = () => {
   }
 
   async function handleSave() {
+    const amountNumber = Number(amount);
+
+    const amountisPositive = checkIfValueIsPositive(amountNumber);
+    const debitIsPositive = checkIfValueIsPositive(debit);
+
+    const shouldNotConvertTheSignal =
+      amountisPositive === false && debitIsPositive === false;
+
     const entry: IEntry = {
       id: currentEntry.id,
-      amount: Number(amount) * debit,
+      amount: shouldNotConvertTheSignal ? amountNumber : amountNumber * debit,
+      // amount: amountNumber,
       description,
       entryAt,
       latitude: geolocation.latitude,
